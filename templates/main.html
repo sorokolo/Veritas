@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+  <style>
+    form {
+      margin: auto;
+      width: 35%;
+    }
+    .result {
+      margin: auto;
+      width: 35%;
+    }
+    #customer_title {
+      background-color: lightgrey;
+      width: 300px;
+      border: 15px solid;
+      padding: 50px;
+      margin: 20px;
+    }
+    .row {
+      display: flex;
+      border-radius: 5px;
+      background-color: #f2f2f2;
+      padding: 20px;
+    }
+    #second_col {
+      margin-left: 20px;
+    }
+
+    .col1 {
+      flex: 50;
+    }
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    input[type="submit"] {
+      width: 100%;
+      background-color: #4caf50;
+      color: white;
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+    ul {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    li a:hover:not(.active) {
+      background-color: #111;
+    }
+
+    .active {
+      background-color: #4caf50;
+    }
+
+    .container {
+      position: relative;
+      text-align: center;
+      color: white;
+    }
+
+    .centered {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    body,
+    html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .hero-image {
+      background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+        url("nlp_img.jpeg");
+      height: 70%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      position: relative;
+    }
+
+    .hero-text {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+    }
+
+    .hero-text button {
+      border: none;
+      outline: 0;
+      display: inline-block;
+      padding: 10px 25px;
+      color: black;
+      background-color: #ddd;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .hero-text button:hover {
+      background-color: #555;
+      color: white;
+    }
+    #buton_section {
+      background-color: #4caf50; /* Green */
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+    }
+  </style>
+  <head>
+    <title>VERITAS</title>
+  </head>
+  <body>
+    <ul>
+      <li><a class="active" href="#home">VERITAS</a></li>
+      <li><a href="https://github.com/sorokolo">Github</a></li>
+      <li><a href="https://www.linkedin.com/">Linkedin</a></li>
+    </ul>
+
+    <div class="hero-image">
+      <div class="hero-text">
+        <h1 style="font-size:50px">Welcome to Veritas</h1>
+        <p style="font-size: 20px;">
+          VERITAS is a python web applicatiion that aims at helping individuals
+          and organizations predict social media text messages relevancy to
+          disasters
+        </p>
+        <a href="{{ url_for('main', _anchor='formsection') }}"
+          ><button id="buton_section">Try our Model</button></a
+        >
+      </div>
+    </div>
+
+    <!-- <header>
+      <div class="container">
+        <img src="image.png" alt="Snow" style="width:90%; height: 20%;" />
+        <div class="centered">
+          Freebie | Definition of Freebie at Dictionary.comwww.dictionary.com ›
+          browse › freebies Freebie definition, something given without charge
+          or cost, as a ticket to a performance or sports event or a free sample
+          at a store: Freebies can be very useful in ...
+        </div>
+      </div>
+    </header> -->
+
+    <section id="formsection" style="padding: 50px;">
+      <form action="{{ url_for('main') }}" method="POST">
+        <legend>Please enter message to classify</legend>
+        <input type="text" id="email_text" name="email_text" />
+        <br />
+
+        <input type="submit" />
+      </form>
+    </section>
+
+    <br />
+    <div class="result" align="center">
+      {% if result %} {% for variable, value in original_input.items() %}
+      <b>{{ variable }}</b> : {{ value }} {% endfor %}
+      <br />
+      <br />
+      Relevance prediction:
+      <p style="font-size:50px;color: #45a049; ">{{ result }}</p>
+      {% endif %}
+    </div>
+  </body>
+</html>
