@@ -3,7 +3,4 @@ gunicorn
 Keras
 numpy
 pandas
-scipy
-tensorboard
 tensorflow
-utils
