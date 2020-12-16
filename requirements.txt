@@ -1,12 +1,9 @@
 Flask
 gunicorn
-Jinja2
 Keras
 numpy
 pandas
 scipy
 tensorboard
 tensorflow
-tqdm
-urllib3
 utils
