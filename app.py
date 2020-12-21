@@ -1,30 +1,13 @@
 import flask
-import pandas as pd
-import pandas as pd
 import numpy as np
-import numpy as np
-import codecs
 import pickle
-import pandas as pd
-from nltk.tokenize import word_tokenize
 import re
-from sklearn.multioutput import MultiOutputClassifier
-from sklearn.model_selection import GridSearchCV
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.pipeline import Pipeline, FeatureUnion
-import nltk
-from sklearn.metrics import classification_report
-from sklearn.base import BaseEstimator,TransformerMixin
 from sklearn.model_selection import train_test_split
-from nltk.stem import WordNetLemmatizer
-from nltk.corpus import stopwords
 from keras.preprocessing.sequence import pad_sequences
 from keras.preprocessing.text import Tokenizer
 from keras.models import load_model 
 
-# Loading the model
-model = load_model("model/network.h5") 
+model = load_model("model/network_1.h5") 
 # loading
 with open('model/tokenizer.pickle', 'rb') as handle:
     tokenizer = pickle.load(handle)
@@ -42,7 +25,7 @@ def main():
         sentence = re.sub(r'\s+', ' ', str(sentence))
 
         return sentence
-    
+        
     TAG_RE = re.compile(r'<[^>]+>')
     def remove_tags(text):
         return TAG_RE.sub('', str(text))
@@ -51,21 +34,22 @@ def main():
         text = preprocess_text(text)
         sequence = tokenizer.texts_to_sequences([text])
         # pad the sequence
-        sequence = pad_sequences(sequence, maxlen=SEQUENCE_LENGTH)
-        # get the prediction
+        sequence =  pad_sequences(sequence, padding='post', maxlen=SEQUENCE_LENGTH)
+
+        # # get the prediction
         prediction = model.predict(sequence)[0]
-        pred = list(prediction)
-        # one-hot encoded vector, revert using np.argmax
-        return pred.index(np.max(list(prediction)))
+
+        return np.argmax(prediction)
 
 
     if flask.request.method == 'GET':
         return(flask.render_template('main.html'))
 
     if flask.request.method == 'POST':
-        email_text = flask.request.form['email_text']
+        message = flask.request.form['message']
 
-        prediction = get_predictions(email_text)
+        # prediction = np.argmax(model.predict(sequence))
+        prediction = get_predictions(message)
         seriousness = ""
         if(prediction == 0):
             seriousness = "Our Model can't decide if this is relevant or not " 
@@ -78,10 +62,11 @@ def main():
 
         return flask.render_template('main.html',
         original_input={
-            "email_text":email_text,
+            "message":message,
                                                         
         },
                                         result=seriousness
+
                                         )
 
 if __name__ == '__main__':
